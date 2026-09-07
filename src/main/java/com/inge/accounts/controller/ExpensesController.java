@@ -4,6 +4,7 @@ import com.inge.accounts.domain.dto.ExpenseSearchResponseDto;
 import com.inge.accounts.domain.dto.ExpensesAddInstallmentsDto;
 import com.inge.accounts.domain.dto.ExpensesDto;
 import com.inge.accounts.domain.dto.ExpensesPatchDto;
+import com.inge.accounts.domain.dto.ExpenseCashflowCardDto;
 import com.inge.accounts.domain.validations.OnCreate;
 import com.inge.accounts.response.ApiResponse;
 import com.inge.accounts.services.ExpensesService;
@@ -101,6 +102,14 @@ public class ExpensesController {
 
         service.togglePaymentByUser(id, username);
         return ResponseEntity.ok(ApiResponse.success("Pagamento atualizado"));
+    }
+
+    @PatchMapping("/{id}/cashflow-card")
+    public ResponseEntity<ApiResponse<Void>> updateCashflowCard(@PathVariable @NotNull Long id,
+                                                                  @RequestBody ExpenseCashflowCardDto dto,
+                                                                  Authentication authentication) {
+        service.updateCashflowCardByUser(id, dto, authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Card da despesa atualizado"));
     }
 
 

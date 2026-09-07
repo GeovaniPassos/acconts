@@ -43,7 +43,8 @@ public class ExpensesMapper {
                 entity.isPayment(),
                 entity.getValue(),
                 entity.getPaymentDate(),
-                entity.getDate()
+                entity.getDate(),
+                entity.getCashflowCard() == null ? null : entity.getCashflowCard().getId()
         );
     }
 

@@ -19,5 +19,6 @@ public record ExpensesDto(Long id,
                           Boolean payment,
                           BigDecimal value,
                           LocalDate paymentDate,
-                          LocalDate date
+                          LocalDate date,
+                          Long cashflowCardId
 ) {}
