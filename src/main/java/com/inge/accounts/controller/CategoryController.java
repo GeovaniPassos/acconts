@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import com.inge.accounts.domain.validations.OnCreate;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/categories")
