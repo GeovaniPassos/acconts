@@ -18,4 +18,6 @@ public interface ExpensesRepository  extends JpaRepository<Expenses, Long>, JpaS
     Optional<Expenses> findByIdAndUserId(Long id, Long userId);
 
     boolean existsByNameAndUserId(String name, Long userId);
+
+    boolean existsByCashflowCardId(Long cashflowCardId);
 }

@@ -39,6 +39,10 @@ public class Expenses {
     @Column
     private LocalDate date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cashflow_card_ref_id")
+    private CashflowCard cashflowCard;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -105,6 +109,14 @@ public class Expenses {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public CashflowCard getCashflowCard() {
+        return cashflowCard;
+    }
+
+    public void setCashflowCard(CashflowCard cashflowCard) {
+        this.cashflowCard = cashflowCard;
     }
 
     public void setId(Long id) {

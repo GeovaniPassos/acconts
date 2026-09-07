@@ -2,12 +2,14 @@ package com.inge.accounts.services;
 
 import com.inge.accounts.domain.dto.*;
 import com.inge.accounts.domain.entity.Category;
+import com.inge.accounts.domain.entity.CashflowCard;
 import com.inge.accounts.domain.entity.Expenses;
 import com.inge.accounts.domain.entity.User;
 import com.inge.accounts.domain.enums.TransactionType;
 import com.inge.accounts.domain.mapper.ExpensesMapper;
 import com.inge.accounts.exceptions.BusinessException;
 import com.inge.accounts.repository.ExpensesRepository;
+import com.inge.accounts.repository.CashflowCardRepository;
 import com.inge.accounts.repository.UserRepository;
 import com.inge.accounts.specification.ExpensesSpecification;
 import jakarta.persistence.EntityManager;
@@ -33,16 +35,19 @@ public class ExpensesService {
     private final ExpensesRepository expensesRepository;
     private final CategoryService categoryService;
     private final UserRepository userRepository;
+    private final CashflowCardRepository cashflowCardRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public ExpensesService(ExpensesRepository expensesRepository,
                            CategoryService categoryService,
-                           UserRepository userRepository) {
+                           UserRepository userRepository,
+                           CashflowCardRepository cashflowCardRepository) {
         this.expensesRepository = expensesRepository;
         this.categoryService = categoryService;
         this.userRepository = userRepository;
+        this.cashflowCardRepository = cashflowCardRepository;
     }
 
     @Transactional
@@ -188,6 +193,23 @@ public class ExpensesService {
         }
 
         ExpensesMapper.toDto(expenses);
+    }
+
+    @Transactional
+    public void updateCashflowCardByUser(Long id, ExpenseCashflowCardDto dto, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+        Expenses expense = expensesRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new BusinessException("Despesa não encontrada para edição."));
+
+        if (dto.cashflowCardId() == null) {
+            expense.setCashflowCard(null);
+            return;
+        }
+
+        CashflowCard card = cashflowCardRepository.findByIdAndUserId(dto.cashflowCardId(), user.getId())
+                .orElseThrow(() -> new BusinessException("Card de fluxo não encontrado."));
+        expense.setCashflowCard(card);
     }
 
     @Transactional
